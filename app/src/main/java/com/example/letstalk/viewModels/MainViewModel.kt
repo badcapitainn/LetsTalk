@@ -53,7 +53,7 @@ class MainViewModel: ViewModel() {
                 // if translation fails try and download the required model
                 Toast.makeText(
                     context,
-                    "Model Download Started.",
+                    "Model Download Started. This might take a while",
                     Toast.LENGTH_SHORT
 
                 ).show()
