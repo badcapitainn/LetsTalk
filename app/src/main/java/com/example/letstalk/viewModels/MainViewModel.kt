@@ -41,7 +41,7 @@ class MainViewModel: ViewModel() {
         val options = TranslatorOptions
             .Builder()
             .setSourceLanguage(TranslateLanguage.ENGLISH)
-            .setTargetLanguage(TranslateLanguage.JAPANESE)
+            .setTargetLanguage(TranslateLanguage.CHINESE)
             .build()
 
         val languageTranslator = Translation
@@ -121,7 +121,7 @@ class MainViewModel: ViewModel() {
             //error handle the success or failure
             if(it == TextToSpeech.SUCCESS){
                 textToSpeech?.let { txtToSpeech ->
-                    txtToSpeech.language = Locale.JAPANESE
+                    txtToSpeech.language = Locale.CHINESE
                     //for speed of audio
                     txtToSpeech.setSpeechRate(1.0f)
 
