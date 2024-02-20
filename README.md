@@ -1,3 +1,3 @@
 # LetsTalk
 
-Chinese to Englsh voice translation android app
+English text to chinese voice translator, still a work in progress
