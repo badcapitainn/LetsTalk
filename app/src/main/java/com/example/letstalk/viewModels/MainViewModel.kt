@@ -1,22 +1,27 @@
 package com.example.letstalk.viewModels
 
 import android.content.Context
+import android.speech.tts.TextToSpeech
 import android.widget.Toast
 import androidx.compose.runtime.State
 import androidx.compose.runtime.mutableStateOf
 import androidx.lifecycle.ViewModel
+import androidx.lifecycle.viewmodel.compose.viewModel
 import com.example.letstalk.states.MainScreenState
 import com.google.mlkit.common.model.DownloadConditions
 import com.google.mlkit.nl.translate.TranslateLanguage
 import com.google.mlkit.nl.translate.Translation
 import com.google.mlkit.nl.translate.Translator
 import com.google.mlkit.nl.translate.TranslatorOptions
+import java.util.Locale
 
 class MainViewModel: ViewModel() {
     private val screenState = mutableStateOf(
         MainScreenState()
     )
     val state:State<MainScreenState> = screenState
+
+    var textToSpeech: TextToSpeech? = null
 
     //function that will update the dataclass when value in text field is changed
     fun onInputtedText(
@@ -36,17 +41,19 @@ class MainViewModel: ViewModel() {
         val options = TranslatorOptions
             .Builder()
             .setSourceLanguage(TranslateLanguage.ENGLISH)
-            .setTargetLanguage(TranslateLanguage.CHINESE)
+            .setTargetLanguage(TranslateLanguage.JAPANESE)
             .build()
 
         val languageTranslator = Translation
             .getClient(options)
 
+        //translated text is saved in  state
         languageTranslator.translate(text)
             .addOnSuccessListener {translatedText ->
                 screenState.value = state.value.copy(
                     translatedText = translatedText
                 )
+
 
             }
             .addOnFailureListener{
@@ -100,5 +107,35 @@ class MainViewModel: ViewModel() {
                 ).show()
             }
 
+    }
+
+    //function that performs the text to speech thingy
+    fun textToSpeech(context: Context, text: String){
+        screenState.value = state.value.copy(
+            buttonEnabled = false // disable button when using the text to speech translator
+        )
+        textToSpeech = TextToSpeech(
+            context
+
+        ){
+            //error handle the success or failure
+            if(it == TextToSpeech.SUCCESS){
+                textToSpeech?.let { txtToSpeech ->
+                    txtToSpeech.language = Locale.JAPANESE
+                    //for speed of audio
+                    txtToSpeech.setSpeechRate(1.0f)
+
+                    txtToSpeech.speak(
+                        text,// will pass the translated text on this parameter
+                        TextToSpeech.QUEUE_ADD,
+                        null,
+                        null
+                    )
+                }
+            }
+            screenState.value = state.value.copy(
+                buttonEnabled = true
+            )
+        }
     }
 }
