@@ -64,7 +64,7 @@ fun MainScreen(
         },
             enabled = state.buttonEnabled
         ){
-            Text(text = "Talk")
+            Text(text = "Speak")
 
         }
     }
