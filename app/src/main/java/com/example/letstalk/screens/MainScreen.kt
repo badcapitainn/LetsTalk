@@ -18,12 +18,18 @@ import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.unit.dp
 import com.example.letstalk.viewModels.MainViewModel
 import androidx.lifecycle.viewmodel.compose.viewModel
+import com.example.letstalk.Manifest
+import com.google.accompanist.permissions.ExperimentalPermissionsApi
+import com.google.accompanist.permissions.rememberPermissionState
 
-@OptIn(ExperimentalMaterial3Api::class)
+@OptIn(ExperimentalMaterial3Api::class, ExperimentalPermissionsApi::class)
 @Composable
 fun MainScreen(
     viewModel: MainViewModel = viewModel()
 ) {
+    //val permissionState = rememberPermissionState(
+       // permission = Manifest.permission.RECORD_AUDIO
+    //)
     val state = viewModel.state.value
     val context = LocalContext.current
 

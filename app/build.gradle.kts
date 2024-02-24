@@ -66,7 +66,8 @@ dependencies {
     androidTestImplementation("androidx.compose.ui:ui-test-junit4")
     debugImplementation("androidx.compose.ui:ui-tooling")
     debugImplementation("androidx.compose.ui:ui-test-manifest")
-    implementation ("androidx.compose.material:material:1.6.1") // replace with the latest version
-    implementation ("androidx.compose.runtime:runtime-livedata:1.6.1") // replace with the latest version
-    implementation ("androidx.lifecycle:lifecycle-viewmodel-compose:2.8.0-alpha01")// replace with the latest version
+    implementation ("androidx.compose.material:material:1.6.1")
+    implementation ("androidx.compose.runtime:runtime-livedata:1.6.1")
+    implementation ("androidx.lifecycle:lifecycle-viewmodel-compose:2.8.0-alpha01")
+    implementation("com.google.accompanist:accompanist-permissions:0.24.11-rc")
 }
