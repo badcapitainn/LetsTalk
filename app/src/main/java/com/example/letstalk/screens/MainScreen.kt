@@ -18,8 +18,14 @@ import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.unit.dp
 import com.example.letstalk.viewModels.MainViewModel
 import androidx.lifecycle.viewmodel.compose.viewModel
-import com.example.letstalk.Manifest
+import android.Manifest
+import androidx.activity.compose.rememberLauncherForActivityResult
+import androidx.compose.runtime.SideEffect
+import androidx.compose.ui.text.font.FontStyle
+import androidx.compose.ui.unit.sp
+import com.example.letstalk.contract.RecognitionContract
 import com.google.accompanist.permissions.ExperimentalPermissionsApi
+import com.google.accompanist.permissions.isGranted
 import com.google.accompanist.permissions.rememberPermissionState
 
 @OptIn(ExperimentalMaterial3Api::class, ExperimentalPermissionsApi::class)
@@ -27,11 +33,22 @@ import com.google.accompanist.permissions.rememberPermissionState
 fun MainScreen(
     viewModel: MainViewModel = viewModel()
 ) {
-    //val permissionState = rememberPermissionState(
-       // permission = Manifest.permission.RECORD_AUDIO
-    //)
+    val permissionState = rememberPermissionState(
+        permission = Manifest.permission.RECORD_AUDIO
+    )
+    val recognitionLauncher = rememberLauncherForActivityResult(
+        contract = RecognitionContract(),
+        onResult ={
+            viewModel.changeTextValue(it.toString())
+
+        }
+    )
     val state = viewModel.state.value
     val context = LocalContext.current
+
+    SideEffect {
+        permissionState.launchPermissionRequest()
+    }
 
     Column(
         Modifier
@@ -40,6 +57,24 @@ fun MainScreen(
         horizontalAlignment = Alignment.CenterHorizontally,
         verticalArrangement = Arrangement.Center
     ) {
+        Button(onClick = {
+            if (permissionState.status.isGranted){
+                recognitionLauncher.launch(Unit)
+
+            }else{
+                permissionState.launchPermissionRequest()
+            }
+        }) {
+            Text(text = "record icon")
+        }
+        
+        if (viewModel.state.value.recordedText != null){
+            Text(
+                text = viewModel.state.value.recordedText!!,
+                fontSize = 24.sp
+            )
+        }
+        
         OutlinedTextField(
             value = state.inputtedText,
             onValueChange = { newValue -> viewModel.onInputtedText(newValue) },

@@ -6,6 +6,7 @@ import android.widget.Toast
 import androidx.compose.runtime.State
 import androidx.compose.runtime.mutableStateOf
 import androidx.lifecycle.ViewModel
+import androidx.lifecycle.viewModelScope
 import androidx.lifecycle.viewmodel.compose.viewModel
 import com.example.letstalk.states.MainScreenState
 import com.google.mlkit.common.model.DownloadConditions
@@ -13,6 +14,7 @@ import com.google.mlkit.nl.translate.TranslateLanguage
 import com.google.mlkit.nl.translate.Translation
 import com.google.mlkit.nl.translate.Translator
 import com.google.mlkit.nl.translate.TranslatorOptions
+import kotlinx.coroutines.launch
 import java.util.Locale
 
 class MainViewModel: ViewModel() {
@@ -135,6 +137,14 @@ class MainViewModel: ViewModel() {
             }
             screenState.value = state.value.copy(
                 buttonEnabled = true
+            )
+        }
+    }
+
+    fun changeTextValue(text:String){
+        viewModelScope.launch {
+            screenState.value = screenState.value.copy(
+                recordedText = text
             )
         }
     }
