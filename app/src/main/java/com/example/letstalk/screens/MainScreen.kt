@@ -20,9 +20,11 @@ import com.example.letstalk.viewModels.MainViewModel
 import androidx.lifecycle.viewmodel.compose.viewModel
 import android.Manifest
 import androidx.activity.compose.rememberLauncherForActivityResult
+import androidx.compose.foundation.layout.Row
 import androidx.compose.runtime.SideEffect
 import androidx.compose.ui.text.font.FontStyle
 import androidx.compose.ui.unit.sp
+import com.example.letstalk.components.recordButton
 import com.example.letstalk.contract.RecognitionContract
 import com.google.accompanist.permissions.ExperimentalPermissionsApi
 import com.google.accompanist.permissions.isGranted
@@ -57,16 +59,28 @@ fun MainScreen(
         horizontalAlignment = Alignment.CenterHorizontally,
         verticalArrangement = Arrangement.Center
     ) {
-        Button(onClick = {
-            if (permissionState.status.isGranted){
-                recognitionLauncher.launch(Unit)
+        Row(
+            horizontalArrangement = Arrangement.Center,
+            verticalAlignment = Alignment.CenterVertically
+        ) {
+            OutlinedTextField(
+                value = state.inputtedText,
+                onValueChange = { newValue -> viewModel.onInputtedText(newValue) },
+                shape = RoundedCornerShape(50.dp),
 
-            }else{
-                permissionState.launchPermissionRequest()
+                )
+
+            recordButton {
+                if (permissionState.status.isGranted){
+                    recognitionLauncher.launch(Unit)
+
+                }else{
+                    permissionState.launchPermissionRequest()
+                }
             }
-        }) {
-            Text(text = "record icon")
+
         }
+
         
         if (viewModel.state.value.recordedText != null){
             Text(
@@ -74,13 +88,8 @@ fun MainScreen(
                 fontSize = 24.sp
             )
         }
-        
-        OutlinedTextField(
-            value = state.inputtedText,
-            onValueChange = { newValue -> viewModel.onInputtedText(newValue) },
-            shape = RoundedCornerShape(50.dp),
 
-        )
+
         Spacer(modifier = Modifier.height(12.dp))
         Button(onClick = {
             viewModel.onButtonClick(
