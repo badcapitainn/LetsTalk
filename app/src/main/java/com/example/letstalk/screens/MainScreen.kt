@@ -20,8 +20,19 @@ import com.example.letstalk.viewModels.MainViewModel
 import androidx.lifecycle.viewmodel.compose.viewModel
 import android.Manifest
 import androidx.activity.compose.rememberLauncherForActivityResult
+import androidx.compose.foundation.background
+import androidx.compose.foundation.border
 import androidx.compose.foundation.layout.Row
+import androidx.compose.foundation.layout.fillMaxWidth
+import androidx.compose.material.icons.Icons
+import androidx.compose.material.icons.automirrored.filled.VolumeUp
+import androidx.compose.material.icons.filled.Mic
+import androidx.compose.material.icons.filled.VolumeUp
+import androidx.compose.material3.Icon
+import androidx.compose.material3.IconButton
+import androidx.compose.material3.Surface
 import androidx.compose.runtime.SideEffect
+import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.text.font.FontStyle
 import androidx.compose.ui.unit.sp
 import com.example.letstalk.components.recordButton
@@ -42,7 +53,6 @@ fun MainScreen(
         contract = RecognitionContract(),
         onResult ={
             viewModel.changeTextValue(it.toString())
-
         }
     )
     val state = viewModel.state.value
@@ -52,71 +62,75 @@ fun MainScreen(
         permissionState.launchPermissionRequest()
     }
 
-    Column(
-        Modifier
+    Surface(
+        modifier = Modifier
             .fillMaxSize()
-            .padding(15.dp),
-        horizontalAlignment = Alignment.CenterHorizontally,
-        verticalArrangement = Arrangement.Center
+            .padding(15.dp)
+            .background(Color.LightGray.copy(alpha = 0.2f)),
+        shape = RoundedCornerShape(15.dp)
     ) {
-        Row(
-            horizontalArrangement = Arrangement.Center,
-            verticalAlignment = Alignment.CenterVertically
+        Column(
+            horizontalAlignment = Alignment.CenterHorizontally,
+            verticalArrangement = Arrangement.Center
         ) {
-            OutlinedTextField(
-                value = state.inputtedText,
-                onValueChange = { newValue -> viewModel.onInputtedText(newValue) },
-                shape = RoundedCornerShape(50.dp),
-
+            Row(
+                horizontalArrangement = Arrangement.Center,
+                verticalAlignment = Alignment.CenterVertically
+            ) {
+                OutlinedTextField(
+                    value = state.inputtedText,
+                    onValueChange = { newValue -> viewModel.onInputtedText(newValue) },
+                    label = { Text("Enter text here") },
+                    shape = RoundedCornerShape(50.dp)
                 )
 
-            recordButton {
-                if (permissionState.status.isGranted){
-                    recognitionLauncher.launch(Unit)
-
-                }else{
-                    permissionState.launchPermissionRequest()
+                IconButton(onClick = {
+                    if (permissionState.status.isGranted){
+                        recognitionLauncher.launch(Unit)
+                    }else{
+                        permissionState.launchPermissionRequest()
+                    }
+                }) {
+                    Icon(Icons.Default.Mic, contentDescription = "Record")
                 }
             }
 
-        }
+            if (viewModel.state.value.recordedText != null){
+                Text(
+                    text = viewModel.state.value.recordedText!!,
+                    fontSize = 24.sp
+                )
+            }
 
-        
-        if (viewModel.state.value.recordedText != null){
-            Text(
-                text = viewModel.state.value.recordedText!!,
-                fontSize = 24.sp
-            )
-        }
+            Spacer(modifier = Modifier.height(12.dp))
+            Button(onClick = {
+                viewModel.onButtonClick(
+                    text = state.inputtedText,
+                    context = context
+                )
+            },
+                enabled = state.buttonEnabled
+            ) {
+                Text(text = "Translate")
+            }
+            Spacer(modifier = Modifier.height(7.dp))
 
+            Surface(
+                modifier = Modifier.fillMaxWidth(),
+                color = Color.LightGray
+            ) {
+                Text(text = state.translatedText)
+            }
 
-        Spacer(modifier = Modifier.height(12.dp))
-        Button(onClick = {
-            viewModel.onButtonClick(
-                text = state.inputtedText,
-                context = context
-            )
-        },
-            enabled = state.buttonEnabled
-        ) {
+            Spacer(modifier = Modifier.height(12.dp))
 
-            Text(text = "Translate")
-
-        }
-        Spacer(modifier = Modifier.height(7.dp))
-        
-        Text(text = state.translatedText)
-        
-        Spacer(modifier = Modifier.height(12.dp))
-        
-        Button(onClick = {
-            viewModel.textToSpeech(context, state.translatedText)
-        },
-            enabled = state.buttonEnabled
-        ){
-            Text(text = "Speak")
-
+            Button(onClick = {
+                viewModel.textToSpeech(context, state.translatedText)
+            },
+                enabled = state.buttonEnabled
+            ){
+                Icon(Icons.AutoMirrored.Filled.VolumeUp, contentDescription = "Speak")
+            }
         }
     }
-
 }

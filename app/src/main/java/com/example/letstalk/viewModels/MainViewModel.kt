@@ -97,7 +97,7 @@ class MainViewModel: ViewModel() {
 
                 ).show()
                 screenState.value = state.value.copy(
-                    buttonEnabled = true //enable button when the translation is complete
+                    buttonEnabled = true
                 )
             }
             .addOnFailureListener {
