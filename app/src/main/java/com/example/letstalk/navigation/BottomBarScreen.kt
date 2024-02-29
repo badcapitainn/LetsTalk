@@ -4,7 +4,6 @@ import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.automirrored.filled.VolumeUp
 import androidx.compose.material.icons.filled.ChatBubble
 import androidx.compose.material.icons.filled.Settings
-import androidx.compose.material.icons.filled.VolumeUp
 import androidx.compose.ui.graphics.vector.ImageVector
 
 sealed class BottomBarScreen(

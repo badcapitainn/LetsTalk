@@ -21,24 +21,16 @@ import androidx.lifecycle.viewmodel.compose.viewModel
 import android.Manifest
 import androidx.activity.compose.rememberLauncherForActivityResult
 import androidx.compose.foundation.background
-import androidx.compose.foundation.border
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.automirrored.filled.VolumeUp
-import androidx.compose.material.icons.filled.Mic
-import androidx.compose.material.icons.filled.VolumeUp
 import androidx.compose.material3.Icon
-import androidx.compose.material3.IconButton
 import androidx.compose.material3.Surface
 import androidx.compose.runtime.SideEffect
 import androidx.compose.ui.graphics.Color
-import androidx.compose.ui.text.font.FontStyle
-import androidx.compose.ui.unit.sp
-import com.example.letstalk.components.recordButton
 import com.example.letstalk.contract.RecognitionContract
 import com.google.accompanist.permissions.ExperimentalPermissionsApi
-import com.google.accompanist.permissions.isGranted
 import com.google.accompanist.permissions.rememberPermissionState
 
 @OptIn(ExperimentalMaterial3Api::class, ExperimentalPermissionsApi::class)
