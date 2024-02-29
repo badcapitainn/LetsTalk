@@ -71,4 +71,5 @@ dependencies {
     implementation ("androidx.lifecycle:lifecycle-viewmodel-compose:2.8.0-alpha02")
     implementation("com.google.accompanist:accompanist-permissions:0.24.11-rc")
     implementation ("androidx.compose.material:material-icons-extended:1.6.2")
+    implementation("androidx.navigation:navigation-compose:2.7.7")
 }
