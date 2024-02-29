@@ -1,8 +1,10 @@
 package com.example.letstalk.navigation
 
 import androidx.compose.material.icons.Icons
+import androidx.compose.material.icons.automirrored.filled.VolumeUp
 import androidx.compose.material.icons.filled.ChatBubble
 import androidx.compose.material.icons.filled.Settings
+import androidx.compose.material.icons.filled.VolumeUp
 import androidx.compose.ui.graphics.vector.ImageVector
 
 sealed class BottomBarScreen(
@@ -10,22 +12,22 @@ sealed class BottomBarScreen(
     val title: String,
     val icon: ImageVector
 ){
-    object Main: BottomBarScreen(
-        route = "main",
-        title = "Main",
-        icon = Icons.Filled.ChatBubble
+    object TextTranslation: BottomBarScreen(
+        route = "textTranslation",
+        title = "Text",
+        icon = Icons.Default.ChatBubble
     )
 
     object Conversation: BottomBarScreen(
         route = "conversation",
         title = "Conversation",
-        icon = Icons.Filled.ChatBubble
+        icon = Icons.AutoMirrored.Default.VolumeUp
     )
 
     object Settings: BottomBarScreen(
         route = "settings",
         title = "Settings",
-        icon = Icons.Filled.Settings
+        icon = Icons.Default.Settings
     )
 }
 

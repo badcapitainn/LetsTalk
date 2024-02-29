@@ -1,136 +1,90 @@
 package com.example.letstalk.screens
 
-import androidx.compose.foundation.layout.Arrangement
-import androidx.compose.foundation.layout.Column
-import androidx.compose.foundation.layout.Spacer
-import androidx.compose.foundation.layout.fillMaxSize
-import androidx.compose.foundation.layout.height
-import androidx.compose.foundation.layout.padding
-import androidx.compose.foundation.shape.RoundedCornerShape
-import androidx.compose.material3.Button
+import android.annotation.SuppressLint
+import androidx.compose.foundation.layout.RowScope
+import androidx.compose.material.BottomNavigation
+import androidx.compose.material.BottomNavigationItem
+import androidx.compose.material.ContentAlpha
+import androidx.compose.material.Icon
+import androidx.compose.material.LocalContentColor
 import androidx.compose.material3.ExperimentalMaterial3Api
-import androidx.compose.material3.OutlinedTextField
+import androidx.compose.material3.Scaffold
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
-import androidx.compose.ui.Alignment
-import androidx.compose.ui.Modifier
-import androidx.compose.ui.platform.LocalContext
-import androidx.compose.ui.unit.dp
-import com.example.letstalk.viewModels.MainViewModel
-import androidx.lifecycle.viewmodel.compose.viewModel
-import android.Manifest
-import androidx.activity.compose.rememberLauncherForActivityResult
-import androidx.compose.foundation.background
-import androidx.compose.foundation.border
-import androidx.compose.foundation.layout.Row
-import androidx.compose.foundation.layout.fillMaxWidth
-import androidx.compose.material.icons.Icons
-import androidx.compose.material.icons.automirrored.filled.VolumeUp
-import androidx.compose.material.icons.filled.Mic
-import androidx.compose.material.icons.filled.VolumeUp
-import androidx.compose.material3.Icon
-import androidx.compose.material3.IconButton
-import androidx.compose.material3.Surface
-import androidx.compose.runtime.SideEffect
+import androidx.compose.runtime.getValue
 import androidx.compose.ui.graphics.Color
-import androidx.compose.ui.text.font.FontStyle
-import androidx.compose.ui.unit.sp
-import com.example.letstalk.components.recordButton
-import com.example.letstalk.contract.RecognitionContract
-import com.google.accompanist.permissions.ExperimentalPermissionsApi
-import com.google.accompanist.permissions.isGranted
-import com.google.accompanist.permissions.rememberPermissionState
+import androidx.navigation.NavDestination
+import androidx.navigation.NavDestination.Companion.hierarchy
+import androidx.navigation.NavGraph.Companion.findStartDestination
+import androidx.navigation.NavHostController
+import androidx.navigation.compose.currentBackStackEntryAsState
+import androidx.navigation.compose.rememberNavController
+import com.example.letstalk.navigation.BottomBarScreen
+import com.example.letstalk.navigation.BottomNavGraph
 
-@OptIn(ExperimentalMaterial3Api::class, ExperimentalPermissionsApi::class)
+
+@SuppressLint("UnusedMaterial3ScaffoldPaddingParameter")
+@OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun MainScreen(
-    viewModel: MainViewModel = viewModel()
+
 ) {
-    val permissionState = rememberPermissionState(
-        permission = Manifest.permission.RECORD_AUDIO
-    )
-    val recognitionLauncher = rememberLauncherForActivityResult(
-        contract = RecognitionContract(),
-        onResult ={
-            viewModel.changeTextValue(it.toString())
-        }
-    )
-    val state = viewModel.state.value
-    val context = LocalContext.current
-
-    SideEffect {
-        permissionState.launchPermissionRequest()
-    }
-
-    Surface(
-        modifier = Modifier
-            .fillMaxSize()
-            .padding(15.dp)
-            .background(Color.LightGray.copy(alpha = 0.2f)),
-        shape = RoundedCornerShape(15.dp)
+    val navController = rememberNavController()
+    Scaffold (
+        bottomBar = { BottomBar(navController = navController)}
     ) {
-        Column(
-            horizontalAlignment = Alignment.CenterHorizontally,
-            verticalArrangement = Arrangement.Center
-        ) {
-            Row(
-                horizontalArrangement = Arrangement.Center,
-                verticalAlignment = Alignment.CenterVertically
-            ) {
-                OutlinedTextField(
-                    value = state.inputtedText,
-                    onValueChange = { newValue -> viewModel.onInputtedText(newValue) },
-                    label = { Text("Enter text here") },
-                    shape = RoundedCornerShape(50.dp)
-                )
+        BottomNavGraph(navController = navController)//for navigating between the bottom bar options
+    }
+}
 
-                IconButton(onClick = {
-                    if (permissionState.status.isGranted){
-                        recognitionLauncher.launch(Unit)
-                    }else{
-                        permissionState.launchPermissionRequest()
-                    }
-                }) {
-                    Icon(Icons.Default.Mic, contentDescription = "Record")
-                }
-            }
+@Composable
+fun BottomBar(
+    navController: NavHostController
+){
+    val screens = listOf(
+        BottomBarScreen.TextTranslation,
+        BottomBarScreen.Conversation,
+        BottomBarScreen.Settings
+    )
+    val navBackStackEntry by navController.currentBackStackEntryAsState()
+    val currentDestination = navBackStackEntry?.destination
 
-            if (viewModel.state.value.recordedText != null){
-                Text(
-                    text = viewModel.state.value.recordedText!!,
-                    fontSize = 24.sp
-                )
-            }
-
-            Spacer(modifier = Modifier.height(12.dp))
-            Button(onClick = {
-                viewModel.onButtonClick(
-                    text = state.inputtedText,
-                    context = context
-                )
-            },
-                enabled = state.buttonEnabled
-            ) {
-                Text(text = "Translate")
-            }
-            Spacer(modifier = Modifier.height(7.dp))
-
-            Surface(
-                modifier = Modifier.fillMaxWidth(),
-                color = Color.LightGray
-            ) {
-                Text(text = state.translatedText)
-            }
-
-            Spacer(modifier = Modifier.height(12.dp))
-
-            Button(onClick = {
-                viewModel.textToSpeech(context, state.translatedText)
-            },
-                enabled = state.buttonEnabled
-            ){
-                Icon(Icons.AutoMirrored.Filled.VolumeUp, contentDescription = "Speak")
-            }
+    BottomNavigation {
+        screens.forEach{screen ->
+            AddItem(
+                screen = screen,
+                currentDestination =currentDestination ,
+                navController = navController
+            )
         }
     }
+}
+
+@Composable
+fun RowScope.AddItem(
+    screen: BottomBarScreen,
+    currentDestination: NavDestination?,
+    navController: NavHostController
+){
+    BottomNavigationItem(
+        label = {
+            Text(
+                text = screen.title,
+                color = Color.White
+            )
+        },
+        icon = {
+            Icon(imageVector = screen.icon, contentDescription = "Navigation Icon")
+        },
+        selected = currentDestination?.hierarchy?.any {
+            it.route == screen.route
+        } == true,
+        onClick = {
+            navController.navigate(screen.route){
+                popUpTo(navController.graph.findStartDestination().id)
+                launchSingleTop = true
+            }
+        },
+        unselectedContentColor = LocalContentColor.current.copy(alpha = ContentAlpha.disabled),
+    )
 }
