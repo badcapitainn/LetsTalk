@@ -21,13 +21,20 @@ import androidx.lifecycle.viewmodel.compose.viewModel
 import android.Manifest
 import androidx.activity.compose.rememberLauncherForActivityResult
 import androidx.compose.foundation.background
+import androidx.compose.foundation.border
+import androidx.compose.foundation.interaction.MutableInteractionSource
+import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.automirrored.filled.VolumeUp
+import androidx.compose.material.ripple.rememberRipple
 import androidx.compose.material3.Icon
 import androidx.compose.material3.Surface
+import androidx.compose.material3.TextField
+import androidx.compose.material3.TextFieldColors
 import androidx.compose.runtime.SideEffect
+import androidx.compose.runtime.remember
 import androidx.compose.ui.graphics.Color
 import com.example.letstalk.contract.RecognitionContract
 import com.google.accompanist.permissions.ExperimentalPermissionsApi
@@ -61,51 +68,71 @@ fun TextTranslationScreen(
             .background(Color.LightGray.copy(alpha = 0.2f)),
         shape = RoundedCornerShape(15.dp)
     ) {
+
         Column(
             horizontalAlignment = Alignment.CenterHorizontally,
             verticalArrangement = Arrangement.Center
         ) {
-            Row(
-                horizontalArrangement = Arrangement.Center,
-                verticalAlignment = Alignment.CenterVertically
+            Box(
+                modifier = Modifier
+                    .fillMaxWidth()
+                    .height(200.dp)
+                    .border(2.dp, Color.Black, RoundedCornerShape(15.dp))
+                    .background(Color.White)
             ) {
-                OutlinedTextField(
+                TextField(
                     value = state.inputtedText,
                     onValueChange = { newValue -> viewModel.onInputtedText(newValue) },
-                    label = { Text("Enter text here") },
-                    shape = RoundedCornerShape(50.dp)
+                    placeholder = { Text(text = "Enter Text Here", color = Color.LightGray)},
+                    modifier = Modifier
+                        .padding(16.dp)
+                        .align(Alignment.TopStart)
                 )
 
-            }
+                Button(
+                    onClick = {
+                        viewModel.onButtonClick(
+                            text = state.inputtedText,
+                            context = context
+                        )
+                    },
+                    enabled = state.buttonEnabled,
+                    modifier = Modifier
+                        .align(Alignment.BottomEnd)
+                        .padding(16.dp)
 
-            Spacer(modifier = Modifier.height(12.dp))
-            Button(onClick = {
-                viewModel.onButtonClick(
-                    text = state.inputtedText,
-                    context = context
-                )
-            },
-                enabled = state.buttonEnabled
-            ) {
-                Text(text = "Translate")
-            }
-            Spacer(modifier = Modifier.height(7.dp))
-
-            Surface(
-                modifier = Modifier.fillMaxWidth(),
-                color = Color.LightGray
-            ) {
-                Text(text = state.translatedText)
+                ) {
+                    Text(text = "Translate")
+                }
             }
 
             Spacer(modifier = Modifier.height(12.dp))
 
-            Button(onClick = {
-                viewModel.textToSpeech(context, state.translatedText)
-            },
-                enabled = state.buttonEnabled
-            ){
-                Icon(Icons.AutoMirrored.Filled.VolumeUp, contentDescription = "Speak")
+            Box(
+                modifier = Modifier
+                    .fillMaxWidth()
+                    .height(200.dp)
+                    .border(2.dp, Color.Black, RoundedCornerShape(15.dp))
+                    .background(Color.White)
+            ) {
+                Text(
+                    text = state.translatedText,
+                    modifier = Modifier
+                        .padding(16.dp)
+                        .align(Alignment.TopStart)
+                )
+
+                Button(
+                    onClick = {
+                        viewModel.textToSpeech(context, state.translatedText)
+                    },
+                    enabled = state.buttonEnabled,
+                    modifier = Modifier
+                        .align(Alignment.BottomEnd)
+                        .padding(16.dp)
+                ){
+                    Icon(Icons.AutoMirrored.Filled.VolumeUp, contentDescription = "Speak")
+                }
             }
         }
     }

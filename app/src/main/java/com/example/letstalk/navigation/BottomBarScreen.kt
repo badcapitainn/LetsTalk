@@ -3,6 +3,7 @@ package com.example.letstalk.navigation
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.automirrored.filled.VolumeUp
 import androidx.compose.material.icons.filled.ChatBubble
+import androidx.compose.material.icons.filled.Mic
 import androidx.compose.material.icons.filled.Settings
 import androidx.compose.ui.graphics.vector.ImageVector
 
@@ -20,7 +21,7 @@ sealed class BottomBarScreen(
     object Conversation: BottomBarScreen(
         route = "conversation",
         title = "Conversation",
-        icon = Icons.AutoMirrored.Default.VolumeUp
+        icon = Icons.Default.Mic
     )
 
     object Settings: BottomBarScreen(
