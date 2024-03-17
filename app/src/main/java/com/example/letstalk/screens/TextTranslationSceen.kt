@@ -26,6 +26,7 @@ import androidx.compose.foundation.interaction.MutableInteractionSource
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.fillMaxWidth
+import androidx.compose.foundation.text.BasicTextField
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.automirrored.filled.VolumeUp
 import androidx.compose.material.ripple.rememberRipple
@@ -36,6 +37,7 @@ import androidx.compose.material3.TextFieldColors
 import androidx.compose.runtime.SideEffect
 import androidx.compose.runtime.remember
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.graphics.SolidColor
 import com.example.letstalk.contract.RecognitionContract
 import com.google.accompanist.permissions.ExperimentalPermissionsApi
 import com.google.accompanist.permissions.rememberPermissionState
@@ -80,14 +82,21 @@ fun TextTranslationScreen(
                     .border(2.dp, Color.Black, RoundedCornerShape(15.dp))
                     .background(Color.White)
             ) {
-                TextField(
+                BasicTextField(
                     value = state.inputtedText,
                     onValueChange = { newValue -> viewModel.onInputtedText(newValue) },
-                    placeholder = { Text(text = "Enter Text Here", color = Color.LightGray)},
+                    cursorBrush = SolidColor(Color.Black),
                     modifier = Modifier
                         .padding(16.dp)
-                        .align(Alignment.TopStart)
+                        .align(Alignment.TopStart),
+                    decorationBox = { innerTextField ->
+                        if (state.inputtedText.isEmpty()) {
+                            Text(text = "Enter Text Here", color = Color.LightGray)
+                        }
+                        innerTextField()
+                    }
                 )
+
 
                 Button(
                     onClick = {
@@ -106,7 +115,7 @@ fun TextTranslationScreen(
                 }
             }
 
-            Spacer(modifier = Modifier.height(12.dp))
+            Spacer(modifier = Modifier.height(20.dp))
 
             Box(
                 modifier = Modifier
