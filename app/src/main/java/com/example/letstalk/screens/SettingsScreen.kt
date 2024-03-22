@@ -3,6 +3,7 @@ package com.example.letstalk.screens
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.material.Surface
 import androidx.compose.material.Text
+import androidx.compose.material3.MaterialTheme
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
 
@@ -10,7 +11,8 @@ import androidx.compose.ui.Modifier
 fun SettingsScreen(){
     Surface(
         modifier = Modifier
-            .fillMaxSize()
+            .fillMaxSize(),
+        color = MaterialTheme.colorScheme.background
     ) {
         Text(text = "Settings Screen")
     }

@@ -68,7 +68,7 @@ fun TextTranslationScreen(
             .fillMaxSize()
             .padding(15.dp)
             .background(Color.LightGray.copy(alpha = 0.2f)),
-        shape = RoundedCornerShape(15.dp)
+
     ) {
 
         Column(
@@ -80,12 +80,12 @@ fun TextTranslationScreen(
                     .fillMaxWidth()
                     .height(200.dp)
                     .border(2.dp, Color.Gray, RoundedCornerShape(15.dp))
-                    .background(Color.White)
+
             ) {
                 BasicTextField(
                     value = state.inputtedText,
                     onValueChange = { newValue -> viewModel.onInputtedText(newValue) },
-                    cursorBrush = SolidColor(Color.Black),
+                    //cursorBrush = SolidColor(Color.Black),
                     modifier = Modifier
                         .padding(16.dp)
                         .align(Alignment.TopStart),
@@ -122,7 +122,7 @@ fun TextTranslationScreen(
                     .fillMaxWidth()
                     .height(200.dp)
                     .border(2.dp, Color.Gray, RoundedCornerShape(15.dp))
-                    .background(Color.White)
+
             ) {
                 Text(
                     text = state.translatedText,

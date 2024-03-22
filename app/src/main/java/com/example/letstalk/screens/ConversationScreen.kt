@@ -19,6 +19,7 @@ import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.Mic
 import androidx.compose.material3.Icon
 import androidx.compose.material3.IconButton
+import androidx.compose.material3.MaterialTheme
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.SideEffect
 import androidx.compose.ui.Alignment
@@ -58,11 +59,13 @@ fun ConversationScreen(
     Surface(
         modifier = Modifier
             .fillMaxSize()
-            .padding(16.dp)
+            .padding(15.dp),
+        color = MaterialTheme.colorScheme.background
+
     ) {
         Column(
             modifier = Modifier
-                .fillMaxSize(),
+                .background(Color.Transparent),
             verticalArrangement = Arrangement.Center,
             horizontalAlignment = Alignment.CenterHorizontally
         ) {
@@ -71,7 +74,7 @@ fun ConversationScreen(
                     .fillMaxWidth()
                     .height(200.dp)
                     .border(2.dp, Color.Gray, RoundedCornerShape(15.dp))
-                    .background(Color.White)
+
             ){
                 Box (
                     modifier = Modifier
@@ -109,7 +112,7 @@ fun ConversationScreen(
                     permissionState.launchPermissionRequest()
                 }
             }) {
-                Icon(Icons.Default.Mic, contentDescription = "Record")
+                Icon(Icons.Default.Mic, contentDescription = "Record", tint = MaterialTheme.colorScheme.surfaceTint)
             }
 
         }
