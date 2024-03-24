@@ -26,9 +26,12 @@ import androidx.compose.foundation.text.BasicTextField
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.automirrored.filled.VolumeUp
 import androidx.compose.material3.Icon
+import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Surface
 import androidx.compose.runtime.SideEffect
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.graphics.SolidColor
+import androidx.compose.ui.text.TextStyle
 import com.example.letstalk.contract.RecognitionContract
 import com.google.accompanist.permissions.ExperimentalPermissionsApi
 import com.google.accompanist.permissions.rememberPermissionState
@@ -76,7 +79,8 @@ fun TextTranslationScreen(
                 BasicTextField(
                     value = state.inputtedText,
                     onValueChange = { newValue -> viewModel.onInputtedText(newValue) },
-                    //cursorBrush = SolidColor(Color.Black),
+                    textStyle = TextStyle(color = MaterialTheme.colorScheme.onBackground),
+                    cursorBrush = SolidColor(MaterialTheme.colorScheme.onBackground),
                     modifier = Modifier
                         .padding(16.dp)
                         .align(Alignment.TopStart),
