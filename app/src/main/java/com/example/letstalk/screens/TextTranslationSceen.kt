@@ -73,7 +73,7 @@ fun TextTranslationScreen(
                 modifier = Modifier
                     .fillMaxWidth()
                     .height(200.dp)
-                    .border(2.dp, Color.Gray, RoundedCornerShape(15.dp))
+                    .border(2.dp, MaterialTheme.colorScheme.surfaceTint, RoundedCornerShape(15.dp))
 
             ) {
                 BasicTextField(
@@ -116,7 +116,7 @@ fun TextTranslationScreen(
                 modifier = Modifier
                     .fillMaxWidth()
                     .height(200.dp)
-                    .border(2.dp, Color.Gray, RoundedCornerShape(15.dp))
+                    .border(2.dp, MaterialTheme.colorScheme.surfaceTint, RoundedCornerShape(15.dp))
 
             ) {
                 Text(
